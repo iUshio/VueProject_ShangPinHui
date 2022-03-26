@@ -47,11 +47,19 @@
             <div class="navbar-inner filter">
               <!-- 排序结构 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a>综合</a>
+                <li :class="{ active: isOne }">
+                  <a>
+                    综合
+                    <span v-show="isOneUp">⬆️</span>
+                    <span v-show="isOneDown">⬇️</span>
+                  </a>
                 </li>
-                <li>
-                  <a>价格</a>
+                <li :class="{ active: isTwo }">
+                  <a>
+                    价格
+                    <span v-show="isTwoUp">⬆️</span>
+                    <span v-show="isTwoDown">⬇️</span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -180,6 +188,25 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList", "trademarkList", "attrsList"]),
+    // 以下六个为排序操作使用
+    isOne() {
+      return this.searchParams.order.indexOf("1") != -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") != -1;
+    },
+    isOneUp() {
+      return this.searchParams.order.indexOf("desc") != -1 && this.searchParams.order.indexOf("1") != -1;
+    },
+    isOneDown() {
+      return this.searchParams.order.indexOf("asc") != -1 && this.searchParams.order.indexOf("1") != -1;
+    },
+    isTwoUp() {
+      return this.searchParams.order.indexOf("desc") != -1 && this.searchParams.order.indexOf("2") != -1;
+    },
+    isTwoDown() {
+      return this.searchParams.order.indexOf("asc") != -1 && this.searchParams.order.indexOf("2") != -1;
+    },
   },
   methods: {
     // 向服务器发送请求获取search模块数据
@@ -238,12 +265,12 @@ export default {
       }
     },
     // 删除品牌属性
-    removeAttr(index){
+    removeAttr(index) {
       // 再次整理参数
-      this.searchParams.props.splice(index,1)
+      this.searchParams.props.splice(index, 1);
       // 再次发送请求
       this.getData();
-    }
+    },
   },
   watch: {
     // 监听路由的信息是否发生变化，如果发生变化，再次发起请求
