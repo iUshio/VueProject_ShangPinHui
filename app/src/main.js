@@ -7,6 +7,9 @@ Vue.component(TypeNav.name, TypeNav)
 // 轮播组件
 import Carousel from './components/Carousel'
 Vue.component(Carousel.name,Carousel)
+// 分页组件
+import Pagination from './components/Pagination'
+Vue.component(Pagination.name,Pagination)
 
 // 引入mockServe.js---mock数据
 import '@/mock/mockServe'

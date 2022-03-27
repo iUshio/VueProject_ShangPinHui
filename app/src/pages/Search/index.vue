@@ -47,14 +47,14 @@
             <div class="navbar-inner filter">
               <!-- 排序结构 -->
               <ul class="sui-nav">
-                <li :class="{ active: isOne }">
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
                   <a>
                     综合
                     <span v-show="isOneUp">⬆️</span>
                     <span v-show="isOneDown">⬇️</span>
                   </a>
                 </li>
-                <li :class="{ active: isTwo }">
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
                   <a>
                     价格
                     <span v-show="isTwoUp">⬆️</span>
@@ -108,35 +108,7 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination></Pagination>
         </div>
       </div>
     </div>
@@ -196,16 +168,28 @@ export default {
       return this.searchParams.order.indexOf("2") != -1;
     },
     isOneUp() {
-      return this.searchParams.order.indexOf("desc") != -1 && this.searchParams.order.indexOf("1") != -1;
+      return (
+        this.searchParams.order.indexOf("desc") != -1 &&
+        this.searchParams.order.indexOf("1") != -1
+      );
     },
     isOneDown() {
-      return this.searchParams.order.indexOf("asc") != -1 && this.searchParams.order.indexOf("1") != -1;
+      return (
+        this.searchParams.order.indexOf("asc") != -1 &&
+        this.searchParams.order.indexOf("1") != -1
+      );
     },
     isTwoUp() {
-      return this.searchParams.order.indexOf("desc") != -1 && this.searchParams.order.indexOf("2") != -1;
+      return (
+        this.searchParams.order.indexOf("desc") != -1 &&
+        this.searchParams.order.indexOf("2") != -1
+      );
     },
     isTwoDown() {
-      return this.searchParams.order.indexOf("asc") != -1 && this.searchParams.order.indexOf("2") != -1;
+      return (
+        this.searchParams.order.indexOf("asc") != -1 &&
+        this.searchParams.order.indexOf("2") != -1
+      );
     },
   },
   methods: {
@@ -269,6 +253,23 @@ export default {
       // 再次整理参数
       this.searchParams.props.splice(index, 1);
       // 再次发送请求
+      this.getData();
+    },
+    // 排序操作
+    changeOrder(flag) {
+      // flag形参，代表用户点击的是综合（1）还是价格（2）
+      let originOrder = this.searchParams.order;
+      let originFlag = originOrder.split(":")[0];
+      let originSort = originOrder.split(":")[1];
+
+      let newOrder = "";
+      if (flag == originFlag) {
+        // 切换升序|降序
+        newOrder = `${originFlag}:${originSort == "desc" ? "asc" : "desc"}`;
+      } else {
+        newOrder = `${flag}:${"desc"}`;
+      }
+      this.searchParams.order = newOrder;
       this.getData();
     },
   },
