@@ -1,18 +1,17 @@
 <template>
   <div class="pagination">
     <button>上一页</button>
-    <button>1</button>
+    <button v-if="startNumAndEndNum.start > 1">1</button>
 
-    <button>···</button>
+    <button v-if="startNumAndEndNum.start > 2">···</button>
 
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
+<!-- 中间部分 -->
+    <template v-for="(page,index) in startNumAndEndNum.end" >
+      <button  v-if="page >= startNumAndEndNum.start" :key="index">{{page}}</button>
+    </template>
 
-    <button>···</button>
-    <button>{{ totalPage }}</button>
+    <button v-if="startNumAndEndNum.end < totalPage - 1">···</button>
+    <button v-if="startNumAndEndNum.end < totalPage">{{ totalPage }}</button>
     <button>下一页</button>
 
     <button style="margin-left: 30px">共 {{ total }} 条</button>
@@ -30,6 +29,7 @@ export default {
     },
     // 计算出连续的页码的起始数字与结束数字
     startNumAndEndNum() {
+      const { continues, pageNo, totalPage } = this;
       // 先定义两个变量，存储起始数字与结束数字
       let start = 0,
         end = 0;
