@@ -70,9 +70,9 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <router-link :to="`/detail/${goods.id}`">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -109,10 +109,11 @@
           </div>
           <!-- 分页器 -->
           <Pagination
-            :pageNo="15"
-            :pageSize="3"
-            :total="91"
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
             :continues="5"
+            @getPageNo="getPageNo"
           ></Pagination>
         </div>
       </div>
@@ -122,7 +123,7 @@
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -165,6 +166,10 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList", "trademarkList", "attrsList"]),
+    // 获取search模块展示的产品移动有多少条
+    ...mapState({
+      total: (state) => state.search.searchList.total,
+    }),
     // 以下六个为排序操作使用
     isOne() {
       return this.searchParams.order.indexOf("1") != -1;
@@ -275,6 +280,13 @@ export default {
         newOrder = `${flag}:${"desc"}`;
       }
       this.searchParams.order = newOrder;
+      this.getData();
+    },
+    // 自定义事件跳转页码的回调函数--获取当前第几页
+    getPageNo(pageNo) {
+      // 整理参数
+      this.searchParams.pageNo = pageNo;
+      // 再次发送请求
       this.getData();
     },
   },
