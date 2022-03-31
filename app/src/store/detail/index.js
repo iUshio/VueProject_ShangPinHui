@@ -1,6 +1,6 @@
 import { reqGoodsInfo } from '@/api'
 const state = {
-    goodInfo:{}
+    goodInfo: {}
 }
 const mutations = {
     GETGOODINFO(state, goodInfo) {
@@ -16,7 +16,21 @@ const actions = {
         }
     }
 }
-const getters = {}
+const getters = {
+    // 路径导航简化的数据
+    categoryView(state) {
+        // 初始时（未发送请求），goodInfo是空的,goodInfo.categoryView是undefined
+        return state.goodInfo.categoryView || {};
+    },
+    // 简化产品信息的数据
+    skuInfo(state) {
+        return state.goodInfo.skuInfo || {};
+    },
+    // 产品的售卖属性的简化
+    spuSaleAttrList(state) {
+        return state.goodInfo.spuSaleAttrList || []
+    }
+}
 
 export default {
     state,
