@@ -21,3 +21,11 @@ export const reqGetSearchInfo = (params) => requests({ url: '/list', method: 'po
 
 // 获取商品详情的api:/api/item/{ skuId } get
 export const reqGoodsInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' })
+
+// 将产品添加到购物车中（获取更新某一个产品的个数）
+// /api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddOrUpdateShopCar = (skuId, skuNum) => requests({ url: `cart/addToCart/${skuId}/${skuNum}`, method: 'post' })
+
+// 获取购物车列表数据结构
+// /api/cart/cartList
+export const reqCartList = () => requests({ url: '/cart/cartList', method: 'get' })

@@ -1,6 +1,11 @@
-import { reqGoodsInfo } from '@/api'
+import { reqAddOrUpdateShopCart, reqGoodsInfo, reqAddOrUpdateShopCar } from '@/api'
+// 封装游客身份模块uuid，生成一个随机字符串
+import {getUUID} from '@/utils/uuid_token'
+
 const state = {
-    goodInfo: {}
+    goodInfo: {},
+    // 游客临时身份ID
+    uuid_token:getUUID()
 }
 const mutations = {
     GETGOODINFO(state, goodInfo) {
@@ -13,6 +18,16 @@ const actions = {
         let result = await reqGoodsInfo(skuId)
         if (result.code == 200) {
             commit('GETGOODINFO', result.data)
+        }
+    },
+    // 将产品添加到购物车中
+    async addOrUpdateShopCar({ commit }, {skuId, skuNum}) {
+        let result = await reqAddOrUpdateShopCar(skuId, skuNum)
+        if(result.code == 200){
+            return 'ok'
+        }else{
+            // 加入购物车失败
+            return Promise.reject(new Error('faile'))
         }
     }
 }

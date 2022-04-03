@@ -5,7 +5,9 @@ import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Search from '@/pages/Search';
 import Register from '@/pages/Register';
-import Detail from '@/pages/Detail'
+import Detail from '@/pages/Detail';
+import AddCartSuccess from '@/pages/AddCartSuccess'
+import ShopCar from '@/pages/ShopCar'
 
 export default [
     {
@@ -35,6 +37,20 @@ export default [
         // 改params参数表示产品id
         path: '/detail/:skuId',
         component: Detail,
+        meta: { show: true }
+    }
+    ,
+    {
+        name:'addcartsuccess',
+        path: '/addcartsuccess',
+        component: AddCartSuccess,
+        meta: { show: true }
+    }
+    ,
+    {
+        name:'shopCar',
+        path: '/shopCar',
+        component: ShopCar,
         meta: { show: true }
     }
     ,

@@ -27,7 +27,9 @@
           <ImageList :skuImageList="skuImageList" />
         </div>
         <!-- 右侧选择区域布局 -->
+
         <div class="InfoWrap">
+          <!-- 产品信息 -->
           <div class="goodsDetail">
             <h3 class="InfoName">
               {{ skuInfo.skuName }}
@@ -78,6 +80,7 @@
             </div>
           </div>
 
+          <!-- 产品售卖属性 -->
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
@@ -88,20 +91,36 @@
                   :class="{ active: spuSaleAttrValue.isChecked == 1 }"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
-                  @click="changeActive(spuSaleAttrValue, spuSaleAttr.spuSaleAttrValueList)"
+                  @click="
+                    changeActive(
+                      spuSaleAttrValue,
+                      spuSaleAttr.spuSaleAttrValueList
+                    )
+                  "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
               </dl>
             </div>
+            <!-- 加入购物车 -->
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="changeSkuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : (skuNum = 1)"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="addShopCar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -346,6 +365,11 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      skuNum: 1,
+    };
+  },
   components: {
     ImageList,
     Zoom,
@@ -365,9 +389,39 @@ export default {
     changeActive(spuSaleAttrValue, spuSaleAttrValueList) {
       // 遍历全部的售卖属性，取消所有高亮
       spuSaleAttrValueList.forEach((item) => {
-        item.isChecked = '0';
+        item.isChecked = "0";
       });
-      spuSaleAttrValue.isChecked = '1'
+      spuSaleAttrValue.isChecked = "1";
+    },
+    // 表单元素修改产品个数（必须为非负整数且大于0）
+    changeSkuNum(event) {
+      this.skuNum = event.target.value * 1;
+      // 用户输入非法
+      if (isNaN(this.skuNum) || this.skuNum < 1) {
+        this.skuNum = 1;
+      } else {
+        // 小数向下取整
+        this.skuNum = parseInt(this.skuNum);
+      }
+    },
+    // 加入购物车
+    async addShopCar() {
+      // 派发action，将产品加入到数据库（服务器）
+      try {
+        await this.$store.dispatch("addOrUpdateShopCar", {
+          skuId: this.$route.params.skuId,
+          skuNum: this.skuNum,
+        });
+        // 本地存储，存储选中的产品信息
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo));
+        // 路由跳转，并将产品的信息带给下一级的路由组件
+        this.$router.push({
+          name: "addcartsuccess",
+          query: { skuNum: this.skuNum },
+        });
+      } catch (error) {
+        alert("失败");
+      }
     },
   },
 };

@@ -1,3 +1,5 @@
+// 引入store仓库
+import store from '@/store'
 // 对axios进行二次封装
 import axios from 'axios';
 // 引入进度条
@@ -5,7 +7,6 @@ import nprogress from 'nprogress'
 // 引入进度条的样式
 import "nprogress/nprogress.css";
 // start：进度条开始 done：进度条结束
-
 // 1.利用axios对象的方法create，去创建一个axios实例
 // 2.reqeust就是axios，只不过需要稍微配置一下
 const requests = axios.create({
@@ -21,6 +22,12 @@ requests.interceptors.request.use((config) => {
     // config：配置对象，对象里面有一个属性很重要，heders请求头
     // 进度条开始动
     nprogress.start();
+
+    // 用户的uuid
+    if (store.state.detail.uuid_token) {
+        // 给请求头添加字段(userTempId)
+        config.headers.userTempId = store.state.detail.uuid_token
+    }
     return config;
 });
 
