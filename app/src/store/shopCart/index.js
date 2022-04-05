@@ -33,15 +33,33 @@ const actions = {
         } else {
             return Promise.reject(new Error('faile'))
         }
+    },
+    // 删除全部选中的产品
+    deleteAllCheckedCart({ dispatch, getters }) {
+        let PromiseAll = []
+        getters.cartList.cartInfoList.forEach(element => {
+            let promise = element.isChecked == 1 ? dispatch('deleteCartListBySkuId', element.skuId) : '';
+            // 将每一次返回的promise添加到数组中
+            PromiseAll.push(promise)
+        });
+        // 只要全部promise都成功，返回结构未成功
+        // 如果有一个失败，则返回失败
+        return Promise.all(PromiseAll)
+    },
+    // 修改全部商品的选中状态
+    updateAllCartChecked({ dispatch, state }, isChecked) {
+        let promiseAll = []
+        state.cartList[0].cartInfoList.forEach(element => {
+            let promise = dispatch('updateCheckedById', { skuId: element.skuId, isChecked })
+            promiseAll.push(promise)
+        })
+        return Promise.all(promiseAll)
     }
 }
 const getters = {
     cartList(state) {
         return state.cartList[0] || {};
     },
-    // cartInfoList(state){
-    //     return state.cartList
-    // }
 }
 
 export default {
