@@ -28,6 +28,10 @@ requests.interceptors.request.use((config) => {
         // 给请求头添加字段(userTempId)
         config.headers.userTempId = store.state.detail.uuid_token
     }
+    // 需要携带token带给服务器
+    if(store.state.user.token){
+        config.headers.token = store.state.user.token
+    }
     return config;
 });
 

@@ -5,6 +5,8 @@ import VueRouter from 'vue-router';
 import routes from './routes'
 //使用插件
 Vue.use(VueRouter);
+// 引入store
+import store from '@/store'
 
 //先把VueRouter原型对象的push备份一份
 let originPush = VueRouter.prototype.push;
@@ -38,7 +40,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 }
 
 //配置路由
-export default new VueRouter({
+let router = new VueRouter({
     // mode: 'history',
     //配置路由
     routes,
@@ -47,3 +49,10 @@ export default new VueRouter({
         return { y: 0 }
     }
 })
+
+// 全局守卫：前置守卫
+router.beforeEach((to,from,next)=>{
+    next()
+})
+
+export default router

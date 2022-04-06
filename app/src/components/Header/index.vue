@@ -5,11 +5,17 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <!-- 未登录 -->
+          <p v-if="!userName">
             <span>请</span>
             <!-- 声明式导航 -->
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="/register">免费注册</router-link>
+          </p>
+          <!-- 登录了 -->
+          <p v-else>
+            <a>{{userName}}</a>
+            <a class="register" @click="logOut">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -78,13 +84,31 @@ export default {
       }
       this.$router.push(location);
     },
+    // 退出登录
+    logOut(){
+      // 发出请求通知服务器退出登录
+      // 清楚本地token与信息
+      try {
+        this.$store.dispatch('userLogOut')
+        // 退出成功回到登录界面
+        this.$router.push('/login')
+      } catch (error) {
+        alert('退出失败')
+      }
+    },
   },
   mounted() {
     // 通过全局事件总线清楚关键字
     this.$bus.$on("clearKeyword", () => {
       this.keyword = "";
-    });
+    })
   },
+  computed:{
+    // 用户名信息
+    userName(){
+      return this.$store.state.user.userInfo.name;
+    }
+  }
 };
 </script>
 
