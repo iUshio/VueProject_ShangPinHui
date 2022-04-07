@@ -6,10 +6,10 @@ import TypeNav from '@/components/TypeNav'
 Vue.component(TypeNav.name, TypeNav)
 // 轮播组件
 import Carousel from './components/Carousel'
-Vue.component(Carousel.name,Carousel)
+Vue.component(Carousel.name, Carousel)
 // 分页组件
 import Pagination from './components/Pagination'
-Vue.component(Pagination.name,Pagination)
+Vue.component(Pagination.name, Pagination)
 
 // 引入mockServe.js---mock数据
 import '@/mock/mockServe'
@@ -24,15 +24,16 @@ Vue.config.productionTip = false
 // 引入仓库
 import store from '@/store';
 
-// 测试
-// import {reqCategoryList} from '@/api';
-// reqCategoryList();
+// 统一接口api文件夹里面全部请求函数
+// 统一引入
+import * as API from '@/api'
 
 new Vue({
   render: h => h(App),
   // 配置全局事件总线
   beforeCreate() {
-    Vue.prototype.$bus = this;
+    Vue.prototype.$bus = this
+    Vue.prototype.$API = API
   },
   //注册路由
   router,

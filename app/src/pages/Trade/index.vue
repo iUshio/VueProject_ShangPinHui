@@ -34,26 +34,33 @@
           <p>配送时间：预计8月10日（周三）09:00-15:00送达</p>
         </div>
       </div>
+      <!-- 商品信息 -->
       <div class="detail">
-        <!-- 商品信息 -->
         <h5>商品清单</h5>
-        <ul class="list clearFix" v-for="order in orderInfo.detailArrayList" :key="order.skuId">
+        <ul
+          class="list clearFix"
+          v-for="order in orderInfo.detailArrayList"
+          :key="order.skuId"
+        >
           <li>
-            <img :src="order.imgUrl" alt="" style="width:100px;height:100px"/>
+            <img
+              :src="order.imgUrl"
+              alt=""
+              style="width: 100px; height: 100px"
+            />
           </li>
           <li>
             <p>
-              {{order.skuName}}
+              {{ order.skuName }}
             </p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥{{order.orderPrice}}</h3>
+            <h3>￥{{ order.orderPrice }}</h3>
           </li>
-          <li>X{{order.skuNum}}</li>
+          <li>X{{ order.skuNum }}</li>
           <li>有货</li>
         </ul>
-        
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
@@ -73,8 +80,11 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>{{orderInfo.totalNum}}</i>件商品，总商品金额</b>
-          <span>¥{{orderInfo.totalAmount}}</span>
+          <b
+            ><i>{{ orderInfo.totalNum }}</i
+            >件商品，总商品金额</b
+          >
+          <span>¥{{ orderInfo.totalAmount }}</span>
         </li>
         <li>
           <b>返现：</b>
@@ -87,16 +97,18 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥{{orderInfo.totalAmount}}</span></div>
+      <div class="price">
+        应付金额:　<span>¥{{ orderInfo.totalAmount }}</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
-        <span>{{uerDefaultAddress.fullAddress}}</span>
-        收货人：<span>{{uerDefaultAddress.consignee}}</span>
-        <span>{{uerDefaultAddress.phoneNum}}</span>
+        <span>{{ uerDefaultAddress.fullAddress }}</span>
+        收货人：<span>{{ uerDefaultAddress.consignee }}</span>
+        <span>{{ uerDefaultAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -108,8 +120,10 @@ export default {
   data() {
     return {
       // 收集买家留言信息
-      msg:'',
-    }
+      msg: "",
+      // 订单号
+      orderId: "",
+    };
   },
   mounted() {
     this.$store.dispatch("getUserAddress");
@@ -118,9 +132,9 @@ export default {
   computed: {
     ...mapState({
       addressInfo: (state) => state.trade.userAddress,
-      orderInfo:state => state.trade.orderInfo,
+      orderInfo: (state) => state.trade.orderInfo,
     }),
-    // 提交订单最终选中的地址
+    // 订单最终选中的地址
     uerDefaultAddress() {
       return this.addressInfo.find((item) => item.isDefault == 1) || {};
     },
@@ -133,6 +147,29 @@ export default {
         element.isDefault = 0;
       });
       address.isDefault = 1;
+    },
+    // 提交订单
+    async submitOrder() {
+      // 交易编码
+      let { tradeNo } = this.orderInfo;
+      let data = {
+        consignee: this.uerDefaultAddress.consignee, //收件人名字
+        consigneeTel: this.uerDefaultAddress.phoneNum, //收件人手机号
+        deliveryAddress: this.uerDefaultAddress.fullAddress, //收件人地址
+        paymentWay: "ONLINE", //支付方式
+        orderComment: this.msg, //买家信息
+        orderDetailList: this.orderInfo.detailArrayList, //商品列表
+      };
+      // 发送订单信息
+
+      let result = await this.$API.reqSubmitOrder(tradeNo, data);
+      if (result.code == 200) {
+        this.orderId = result.data;
+        // 路由跳转+路由传参
+        this.$router.push('/pay?orderId='+this.orderId);
+      } else {
+        alert(result.message);
+      }
     },
   },
 };
