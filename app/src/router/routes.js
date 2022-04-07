@@ -8,6 +8,7 @@ import Register from '@/pages/Register';
 import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCar from '@/pages/ShopCar'
+import Trade from '@/pages/Trade'
 
 export default [
     {
@@ -51,6 +52,13 @@ export default [
         name:'shopCar',
         path: '/shopCar',
         component: ShopCar,
+        meta: { show: true }
+    }
+    ,
+    {
+        name:'trade',
+        path: '/trade',
+        component: Trade,
         meta: { show: true }
     }
     ,

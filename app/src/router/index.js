@@ -7,6 +7,7 @@ import routes from './routes'
 Vue.use(VueRouter);
 // 引入store
 import store from '@/store'
+import user from '@/store/user';
 
 //先把VueRouter原型对象的push备份一份
 let originPush = VueRouter.prototype.push;
@@ -51,8 +52,39 @@ let router = new VueRouter({
 })
 
 // 全局守卫：前置守卫
-router.beforeEach((to,from,next)=>{
-    next()
+router.beforeEach(async (to, from, next) => {
+    let token = store.state.user.token
+    // 用户信息
+    let name = store.state.user.userInfo.name
+
+    // 用户已经登录了
+    if (token) {
+        // 用户应登录无法去login界面
+        if (to.path == '/login' || to.path == '/register') {
+            next('/home')
+        } else {
+            // 跳转页面时，如果用户信息丢失但还含有token，即登陆了用户信息没了
+            // 再次获取用户信息
+            if (!name) {
+                try {
+                    // 获取用户信息，在首页展示
+                    await store.dispatch('getUserInfo')
+                    next()
+                } catch (error) {
+                    // token失效，清楚用户信息，删除失效token
+                    await store.dispatch('userLogOut')
+                    // 返回login界面
+                    next('/login')
+                }
+            } else {
+                // 没有问题直接放行
+                next()
+            }
+        }
+    } else {
+        next()
+    }
+
 })
 
 export default router
