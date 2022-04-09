@@ -16,6 +16,14 @@ import '@/mock/mockServe'
 // 引入swiper样式
 import 'swiper/css/swiper.css'
 
+// 引入elementui（按需引入）
+import { Button,MessageBox } from 'element-ui'
+Vue.component(Button.name, Button)
+// 挂载在原型上
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+
+
 //引入路由
 import router from '@/router'
 // 关闭生产提示

@@ -10,6 +10,7 @@ import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCar from '@/pages/ShopCar'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
+import PaySuccess from '@/pages/PaySuccess'
 
 export default [
     {
@@ -70,6 +71,12 @@ export default [
         meta: { show: true }
     }
     ,
+    {
+        name:'paysuccess',
+        path:'/paysuccess',
+        component:PaySuccess,
+        meta: { show: true }
+    },
     // 重定向，在项目启动时，将其定向到首页
     {
         path: '*',
