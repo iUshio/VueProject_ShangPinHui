@@ -137,29 +137,43 @@ export default {
         confirmButtonText: "我已支付",
         // 不显示右上角取消按钮
         showClose: false,
+        // 关闭弹出框的配置函数
+        beforeClose: (type, instance, done) => {
+          // type:区分取消|确定按钮
+          // instance:当前组件实例
+          // done:关闭弹窗方法
+          if (type == "cancel") {
+            alert("请联系管理员！");
+            // 清除定时器
+            clearInterval(this.timer);
+            this.timer = null;
+            done();
+          } else {
+            // 判断是否真的支付
+            if (this.code == 205) {
+              done();
+              // 跳转到下一路由
+              this.$router.push("/paysuccess");
+            }
+          }
+        },
       });
       // 如果没有定时器则开启一个定时器
       if (!this.timer) {
         this.timer = setInterval(async () => {
           // 发请求获取用户支付状态
           let result = await this.$API.reqPayStatus(this.orderId);
-          if (result.code == 200) {
+          console.log(result);
+          // 因想白嫖，设置支付中（205）
+          if (result.code == 205) {
             // 清除定时器
             clearInterval(this.timer);
             this.timer = null;
             // 保存支付成功返回的code
             this.code = result.code;
-            // 关闭弹出框
-            this.$msgbox.close();
-            // 跳转到下一路由
-            this.$router.push("/paysuccess");
           }
         }, 1000);
       }
-      // 清除定时器
-      clearInterval(this.timer);
-      this.timer = null;
-
     },
   },
 };

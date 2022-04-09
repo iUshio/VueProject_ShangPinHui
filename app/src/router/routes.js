@@ -11,6 +11,9 @@ import ShopCar from '@/pages/ShopCar'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
 import PaySuccess from '@/pages/PaySuccess'
+import Center from '@/pages/Center'
+import MyOrder from '@/pages/Center/MyOrder'
+import GroupOrder from '@/pages/Center/GroupOrder'
 
 export default [
     {
@@ -44,39 +47,64 @@ export default [
     }
     ,
     {
-        name:'addcartsuccess',
+        name: 'addcartsuccess',
         path: '/addcartsuccess',
         component: AddCartSuccess,
         meta: { show: true }
     }
     ,
     {
-        name:'shopCar',
+        name: 'shopCar',
         path: '/shopCar',
         component: ShopCar,
         meta: { show: true }
     }
     ,
     {
-        name:'trade',
+        name: 'trade',
         path: '/trade',
         component: Trade,
         meta: { show: true }
     }
     ,
     {
-        name:'pay',
+        name: 'pay',
         path: '/pay',
         component: Pay,
         meta: { show: true }
     }
     ,
     {
-        name:'paysuccess',
-        path:'/paysuccess',
-        component:PaySuccess,
+        name: 'paysuccess',
+        path: '/paysuccess',
+        component: PaySuccess,
         meta: { show: true }
-    },
+    }
+    ,
+    {
+        name: 'center',
+        path: '/center',
+        component: Center,
+        meta: { show: true },
+        children: [
+            {
+                path: 'myorder',
+                component: MyOrder,
+            }
+            ,
+            {
+                path: 'grouporder',
+                component: GroupOrder,
+            }
+            ,
+            // 访问center页面时默认重定向到我的订单页面
+            {
+                path:'/center',
+                redirect:'/center/myorder'
+            },
+        ]
+    }
+    ,
     // 重定向，在项目启动时，将其定向到首页
     {
         path: '*',
