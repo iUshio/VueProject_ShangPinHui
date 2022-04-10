@@ -92,7 +92,7 @@
       </div>
       <!-- 分页器 -->
       <div class="choose-order">
-         <!-- 分页器 -->
+        <!-- 分页器 -->
         <Pagination
           :pageNo="page"
           :pageSize="limit"
@@ -184,10 +184,10 @@ export default {
       }
     },
     //获取当前点击那一页
-    getPageNo(page){
-       //修改组件响应式数据page
-       this.page = page;
-       this.getData();
+    getPageNo(page) {
+      //修改组件响应式数据page
+      this.page = page;
+      this.getData();
     },
   },
   computed: {

@@ -2,7 +2,7 @@
   <div class="swiper-container" id="floor1Swiper" ref="cur">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="carousel in List" :key="carousel.id">
-        <img :src="carousel.imgUrl" />
+        <img v-lazy="carousel.imgUrl" />
       </div>
     </div>
     <!-- 如果需要分页器 -->

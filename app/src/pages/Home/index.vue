@@ -17,18 +17,16 @@
 import ListContainer from "./ListContainer";
 import Recommand from "./Recommend";
 import Rank from "./Rank";
-import Like from './Like';
-import Floor from './Floor'
-import Brand from './Brand'
+import Like from "./Like";
+import Floor from "./Floor";
+import Brand from "./Brand";
 
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "Home",
   mounted() {
-    console.log("主页");
     this.$store.dispatch("getFloorList");
-    
   },
   components: {
     ListContainer,
@@ -36,12 +34,12 @@ export default {
     Rank,
     Like,
     Floor,
-    Brand
+    Brand,
   },
-  computed:{
+  computed: {
     ...mapState({
-      floorList:state=>state.home.floorList
-    })
-  }
+      floorList: (state) => state.home.floorList,
+    }),
+  },
 };
 </script>

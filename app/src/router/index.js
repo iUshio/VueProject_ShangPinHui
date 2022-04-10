@@ -81,8 +81,21 @@ router.beforeEach(async (to, from, next) => {
                 next()
             }
         }
+
     } else {
-        next()
+        // 未登录不能去交易相关页面以及支付相关页面、个人中心
+        // 这些页面全部跳转到登录页面
+        let toPath = to.path
+        if (toPath.indexOf('/trade') != -1 ||
+            toPath.indexOf('/pay') != -1 ||
+            toPath.indexOf('/center') != -1
+        ) {
+            // 把未登录的时候想去而没有去成的页面存储于地址栏中
+            next( '/login?redirect=' + toPath)
+        } else {
+            next()
+        }
+
     }
 
 })

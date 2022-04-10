@@ -23,6 +23,18 @@ Vue.component(Button.name, Button)
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 
+// 图片懒加载
+import VueLazyload from 'vue-lazyload'
+// 导入图片
+import iDLUT from '@/assets/images/iDLUT.gif'
+// 注册插件
+Vue.use(VueLazyload,{
+  // 懒加载默认图片
+  loading:iDLUT
+})
+
+
+
 
 //引入路由
 import router from '@/router'
@@ -48,3 +60,6 @@ new Vue({
   // 注册仓库：组件实例的身上会多一个属性：$store
   store
 }).$mount('#app')
+
+// 引入表单校验插件
+import '@/plugins/validate'
