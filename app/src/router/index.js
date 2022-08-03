@@ -7,7 +7,6 @@ import routes from './routes'
 Vue.use(VueRouter);
 // 引入store
 import store from '@/store'
-import user from '@/store/user';
 
 //先把VueRouter原型对象的push备份一份
 let originPush = VueRouter.prototype.push;
@@ -42,7 +41,8 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 
 //配置路由
 let router = new VueRouter({
-    // mode: 'history',
+    // mode: 'hash',
+    // base: process.env.BASE_URL,
     //配置路由
     routes,
     scrollBehavior(to, from, savedPosition) {

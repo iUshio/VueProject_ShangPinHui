@@ -1,5 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
+  publicPath: './',
   transpileDependencies: true,
   //关闭eslint校验工具
   lintOnSave:false,
@@ -10,6 +11,8 @@ module.exports = defineConfig({
     proxy:{
       '/api':{
         target:'http://gmall-h5-api.atguigu.cn',
+        /* 允许跨域 */
+        // changeOrigin: true,
         // pathRewrite:{'^/api':''},
       }
     }
