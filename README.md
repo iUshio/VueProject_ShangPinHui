@@ -1,5 +1,5 @@
 # VueProject_ShangPinHui
- Vue实战项目——尚品会前台（已完成） <a href="iUshio.github.io">访问地址</a>
+ Vue实战项目——尚品会前台（已完成） [访问地址](http://iushio.github.io)
 
 ## 实现的功能
 - 用户注册、登录、浏览商品、添加购物车并购买
